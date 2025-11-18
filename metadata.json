@@ -1,0 +1,7 @@
+{
+  "name": "Industrial Fan Selection & Monitoring",
+  "description": "A comprehensive software system for the intelligent selection, calculation, and monitoring of industrial fans. It suggests the best fan based on technical parameters, provides performance simulations, economic analysis, and professional reports.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
