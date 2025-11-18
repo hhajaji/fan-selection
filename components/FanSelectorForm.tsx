@@ -1,6 +1,5 @@
-
 import React, { useState, useMemo } from 'react';
-import { m3hToCfm, cfmToM3h, paToInwg, inwgToPa } from '../utils/conversions.ts';
+import { m3hToCfm, cfmToM3h, paToInwg, inwgToPa } from '../utils/conversions';
 
 interface FanSelectorFormProps {
   filters: {

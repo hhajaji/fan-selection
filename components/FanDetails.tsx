@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
-import { Fan, PerformanceData } from '../types.ts';
+import { Fan, PerformanceData } from '../types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceDot, Brush } from 'recharts';
-import { m3hToCfm, cfmToM3h, paToInwg, inwgToPa } from '../utils/conversions.ts';
+import { m3hToCfm, cfmToM3h, paToInwg, inwgToPa } from '../utils/conversions';
 
 
 interface FanDetailsProps {

@@ -1,11 +1,10 @@
-
 import React, { useState, useMemo } from 'react';
-import { Fan } from '../types.ts';
-import FanSelectorForm from './FanSelectorForm.tsx';
-import FanResults from './FanResults.tsx';
-import FanDetails from './FanDetails.tsx';
-import FanComparison from './FanComparison.tsx';
-import AIVoiceFilter from './AIVoiceFilter.tsx';
+import { Fan } from '../types';
+import FanSelectorForm from './FanSelectorForm';
+import FanResults from './FanResults';
+import FanDetails from './FanDetails';
+import FanComparison from './FanComparison';
+import AIVoiceFilter from './AIVoiceFilter';
 
 interface CustomerPortalProps {
   fans: Fan[];

@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Fan } from '../types.ts';
+import { Fan } from '../types';
 import { GoogleGenAI } from '@google/genai';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, TooltipProps } from 'recharts';
-import { m3hToCfm, cfmToM3h, paToInwg, inwgToPa } from '../utils/conversions.ts';
+import { m3hToCfm, cfmToM3h, paToInwg, inwgToPa } from '../utils/conversions';
 
 interface FanComparisonProps {
   fans: Fan[];
@@ -91,7 +91,7 @@ const GeminiComparisonSummary: React.FC<{ fans: Fan[] }> = ({ fans }) => {
 const interpolate = (x: number, p1: [number, number], p2: [number, number]): number => {
     const [x1, y1] = p1;
     const [x2, y2] = p2;
-    if (Number(x1) === Number(x2)) return Number(y1);
+    if (x1 === x2) return y1;
     // Ensure all operands are numbers before performing arithmetic operations.
     return Number(y1) + ((Number(x) - Number(x1)) * (Number(y2) - Number(y1))) / (Number(x2) - Number(x1));
 };
@@ -109,7 +109,7 @@ const CustomComparisonTooltip: React.FC<CustomTooltipProps> = ({ active, payload
         <div className="p-3 bg-white shadow-lg rounded-md border border-slate-200">
           <p className="font-bold text-slate-800 border-b pb-1 mb-2">
               {/* FIX: Ensure label is treated as a number for formatting, as it can be inferred as 'unknown' or 'any' from the library. */}
-              {`دبی: ${typeof label === 'number' ? label.toLocaleString('fa-IR') : label} ${units.airflow}`}
+              {`دبی: ${typeof label === 'number' ? (label as number).toLocaleString('fa-IR') : label} ${units.airflow}`}
           </p>
           <ul className="space-y-1 text-sm">
             {payload.map((entry, index) => (
@@ -117,7 +117,7 @@ const CustomComparisonTooltip: React.FC<CustomTooltipProps> = ({ active, payload
                 <span className="block w-3 h-3 rounded-full" style={{ backgroundColor: entry.stroke }}></span>
                 <span className="font-semibold">{entry.name}:</span>
                 {/* FIX: Ensure entry.value is treated as a number for formatting to prevent type errors. */}
-                <span>{typeof entry.value === 'number' ? entry.value.toLocaleString('fa-IR', { maximumFractionDigits: 2 }) : entry.value} {units.pressure}</span>
+                <span>{typeof entry.value === 'number' ? (entry.value as number).toLocaleString('fa-IR', { maximumFractionDigits: 2 }) : entry.value} {units.pressure}</span>
               </li>
             ))}
           </ul>

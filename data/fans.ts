@@ -1,5 +1,4 @@
-
-import { Fan } from '../types.ts';
+import { Fan } from '../types';
 
 export const FANS_DATA: Fan[] = [
   {
