@@ -1,16 +1,4 @@
-
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-
-const rootElement = document.getElementById('root');
-if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
-}
-
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// This file is intentionally left blank.
+// The application bootstrap logic has been moved directly into an inline script
+// in `index.html` to resolve module loading and MIME type errors that occur when
+// deploying to static hosting services like GitHub Pages.

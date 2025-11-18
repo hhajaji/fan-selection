@@ -87,13 +87,13 @@ const GeminiComparisonSummary: React.FC<{ fans: Fan[] }> = ({ fans }) => {
     );
 };
 
-// FIX: Explicitly cast values to Number to fix arithmetic operation errors that can occur if types are inferred incorrectly.
+// FIX: Removed redundant Number() casting. The function's type signature already ensures all variables are numbers, fixing the arithmetic operation errors.
 const interpolate = (x: number, p1: [number, number], p2: [number, number]): number => {
     const [x1, y1] = p1;
     const [x2, y2] = p2;
     if (x1 === x2) return y1;
     // Ensure all operands are numbers before performing arithmetic operations.
-    return Number(y1) + ((Number(x) - Number(x1)) * (Number(y2) - Number(y1))) / (Number(x2) - Number(x1));
+    return y1 + ((x - x1) * (y2 - y1)) / (x2 - x1);
 };
 
 // FIX: Replaced `any` with strong types for Tooltip props to ensure type safety and proper integration with Recharts.
@@ -108,7 +108,7 @@ const CustomComparisonTooltip: React.FC<CustomTooltipProps> = ({ active, payload
         <div className="p-3 bg-white shadow-lg rounded-md border border-slate-200">
           <p className="font-bold text-slate-800 border-b pb-1 mb-2">
               {/* FIX: Add type guard to ensure `label` is a number before calling toLocaleString, as its type can be `unknown` from the library. */}
-              {`دبی: ${typeof label === 'number' ? (label as number).toLocaleString('fa-IR') : label} ${units.airflow}`}
+              {`دبی: ${typeof label === 'number' ? label.toLocaleString('fa-IR') : label} ${units.airflow}`}
           </p>
           <ul className="space-y-1 text-sm">
             {payload.map((entry, index) => (
@@ -116,7 +116,7 @@ const CustomComparisonTooltip: React.FC<CustomTooltipProps> = ({ active, payload
                 <span className="block w-3 h-3 rounded-full" style={{ backgroundColor: entry.stroke }}></span>
                 <span className="font-semibold">{entry.name}:</span>
                 {/* FIX: Add type guard to ensure `entry.value` is a number before calling toLocaleString, preventing errors with `unknown` types. */}
-                <span>{typeof entry.value === 'number' ? (entry.value as number).toLocaleString('fa-IR', { maximumFractionDigits: 2 }) : entry.value} {units.pressure}</span>
+                <span>{typeof entry.value === 'number' ? entry.value.toLocaleString('fa-IR', { maximumFractionDigits: 2 }) : entry.value} {units.pressure}</span>
               </li>
             ))}
           </ul>

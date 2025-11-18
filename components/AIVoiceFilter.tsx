@@ -2,13 +2,35 @@ import React, { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI, Type } from '@google/genai';
 
 // FIX: Define the SpeechRecognition interface to fix TypeScript errors for this experimental API.
+interface SpeechRecognitionResult {
+  isFinal: boolean;
+  [key: number]: SpeechRecognitionAlternative;
+}
+interface SpeechRecognitionAlternative {
+  transcript: string;
+}
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+  resultIndex: number;
+}
+interface SpeechRecognitionResultList {
+  length: number;
+  item(index: number): SpeechRecognitionResult;
+  [index: number]: SpeechRecognitionResult;
+}
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
+interface SpeechRecognitionStatic {
+  new (): SpeechRecognition;
+}
 interface SpeechRecognition {
   lang: string;
   continuous: boolean;
   interimResults: boolean;
   onstart: () => void;
-  onresult: (event: any) => void;
-  onerror: (event: any) => void;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: SpeechRecognitionErrorEvent) => void;
   onend: () => void;
   start: () => void;
   stop: () => void;
@@ -33,7 +55,7 @@ const AIVoiceFilter: React.FC<AIVoiceFilterProps> = ({ onFiltersUpdate }) => {
 
   useEffect(() => {
     // FIX: Use `(window as any)` to access non-standard browser APIs without TypeScript errors.
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition as SpeechRecognitionStatic;
     if (!SpeechRecognition) {
       setError('تشخیص گفتار توسط مرورگر شما پشتیبانی نمی‌شود.');
       return;

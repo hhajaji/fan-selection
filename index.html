@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
   <head>
-    <meta charset="UTF--8" />
+    <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>سیستم هوشمند انتخاب فن صنعتی</title>
@@ -61,17 +61,33 @@
   <script type="importmap">
 {
   "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "recharts": "https://aistudiocdn.com/recharts@^3.4.1",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.0"
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "recharts": "https://esm.sh/recharts@2.12.7",
+    "@google/genai": "https://esm.sh/@google/genai@0.11.3",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
   }
 }
 </script>
 </head>
   <body>
     <div id="root"></div>
-    <script type="text/babel" data-type="module" src="./index.tsx"></script>
+    <script type="text/babel" data-type="module">
+      import React from 'react';
+      import ReactDOM from 'react-dom/client';
+      import App from './App.tsx';
+
+      const rootElement = document.getElementById('root');
+      if (!rootElement) {
+        throw new Error("Could not find root element to mount to");
+      }
+
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
   </body>
 </html>
