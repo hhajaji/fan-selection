@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Fan } from '../types';
+import { Fan } from '../types.ts';
 // Correct import for GoogleGenAI as per guidelines
 import { GoogleGenAI } from '@google/genai';
 

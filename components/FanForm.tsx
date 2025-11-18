@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Fan, PerformanceData } from '../types';
+import { Fan, PerformanceData } from '../types.ts';
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, DotProps } from 'recharts';
 
 // Internal type with a temporary ID for stable editing

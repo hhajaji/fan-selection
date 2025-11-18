@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Fan } from '../types';
+import { Fan } from '../types.ts';
 import { GoogleGenAI } from '@google/genai';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, TooltipProps } from 'recharts';
-import { m3hToCfm, cfmToM3h, paToInwg, inwgToPa } from '../utils/conversions';
+import { m3hToCfm, cfmToM3h, paToInwg, inwgToPa } from '../utils/conversions.ts';
 
 interface FanComparisonProps {
   fans: Fan[];

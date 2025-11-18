@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
-import { Fan } from './types';
-import { FANS_DATA } from './data/fans';
-import Header from './components/Header';
-import Home from './components/Home';
-import CustomerPortal from './components/CustomerPortal';
-import AdminDashboard from './components/AdminDashboard';
+import { Fan } from './types.ts';
+import { FANS_DATA } from './data/fans.ts';
+import Header from './components/Header.tsx';
+import Home from './components/Home.tsx';
+import CustomerPortal from './components/CustomerPortal.tsx';
+import AdminDashboard from './components/AdminDashboard.tsx';
 
 const App: React.FC = () => {
   const [view, setView] = useState<'home' | 'customer' | 'admin'>('home');
