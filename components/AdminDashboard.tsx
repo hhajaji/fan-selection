@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Fan, PerformanceData } from '../types';
-import FanForm from './FanForm';
+import { Fan, PerformanceData } from '../types.ts';
+import FanForm from './FanForm.tsx';
 
 // To satisfy TypeScript, as XLSX is loaded from a script tag in index.html
 declare const XLSX: any;

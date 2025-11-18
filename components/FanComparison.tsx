@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from 'react';
-import { Fan } from '../types';
+import { Fan } from '../types.ts';
 import { GoogleGenAI } from '@google/genai';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, TooltipProps } from 'recharts';
-import { m3hToCfm, cfmToM3h, paToInwg, inwgToPa } from '../utils/conversions';
+import { m3hToCfm, cfmToM3h, paToInwg, inwgToPa } from '../utils/conversions.ts';
 
 interface FanComparisonProps {
   fans: Fan[];
@@ -87,7 +87,7 @@ const GeminiComparisonSummary: React.FC<{ fans: Fan[] }> = ({ fans }) => {
     );
 };
 
-// FIX: Explicitly cast values to Number to avoid potential type inference issues during arithmetic operations.
+// FIX: Explicitly cast values to Number to fix arithmetic operation errors that can occur if types are inferred incorrectly.
 const interpolate = (x: number, p1: [number, number], p2: [number, number]): number => {
     const [x1, y1] = p1;
     const [x2, y2] = p2;
@@ -96,8 +96,7 @@ const interpolate = (x: number, p1: [number, number], p2: [number, number]): num
     return Number(y1) + ((Number(x) - Number(x1)) * (Number(y2) - Number(y1))) / (Number(x2) - Number(x1));
 };
 
-// FIX: Replaced `any` with a strong type for Tooltip props to ensure type safety.
-// This custom interface avoids conflicts in the generic Recharts TooltipProps where 'label' and 'name' might have different types.
+// FIX: Replaced `any` with strong types for Tooltip props to ensure type safety and proper integration with Recharts.
 interface CustomTooltipProps extends TooltipProps<number, string> {
     fans: Fan[];
     units: { airflow: AirflowUnit, pressure: PressureUnit };
@@ -108,7 +107,7 @@ const CustomComparisonTooltip: React.FC<CustomTooltipProps> = ({ active, payload
       return (
         <div className="p-3 bg-white shadow-lg rounded-md border border-slate-200">
           <p className="font-bold text-slate-800 border-b pb-1 mb-2">
-              {/* FIX: Ensure label is treated as a number for formatting, as it can be inferred as 'unknown' or 'any' from the library. */}
+              {/* FIX: Add type guard to ensure `label` is a number before calling toLocaleString, as its type can be `unknown` from the library. */}
               {`دبی: ${typeof label === 'number' ? (label as number).toLocaleString('fa-IR') : label} ${units.airflow}`}
           </p>
           <ul className="space-y-1 text-sm">
@@ -116,7 +115,7 @@ const CustomComparisonTooltip: React.FC<CustomTooltipProps> = ({ active, payload
               <li key={`item-${index}`} className="flex items-center gap-2">
                 <span className="block w-3 h-3 rounded-full" style={{ backgroundColor: entry.stroke }}></span>
                 <span className="font-semibold">{entry.name}:</span>
-                {/* FIX: Ensure entry.value is treated as a number for formatting to prevent type errors. */}
+                {/* FIX: Add type guard to ensure `entry.value` is a number before calling toLocaleString, preventing errors with `unknown` types. */}
                 <span>{typeof entry.value === 'number' ? (entry.value as number).toLocaleString('fa-IR', { maximumFractionDigits: 2 }) : entry.value} {units.pressure}</span>
               </li>
             ))}
@@ -173,6 +172,7 @@ const FanComparison: React.FC<FanComparisonProps> = ({ fans, onBack }) => {
     });
 
     // --- Table Data Processing ---
+    // FIX: Replaced unsafe `fan[key]` with a type-safe switch statement to prevent potential runtime errors and improve type checking.
     const getSpecValue = (fan: Fan, key: string): string | number => {
         switch (key) {
             case 'maxAirflow':
@@ -185,7 +185,6 @@ const FanComparison: React.FC<FanComparisonProps> = ({ fans, onBack }) => {
                 return `${fan.dimensions.height}x${fan.dimensions.width}x${fan.dimensions.depth}`;
             case 'electrical':
                 return `${fan.electricalSpecs.voltage}V / ${fan.electricalSpecs.phase}Ph / ${fan.electricalSpecs.frequency}Hz`;
-            // Replaced unsafe fan[key] with type-safe, explicit property access.
             case 'type':
                 return fan.type;
             case 'manufacturer':
