@@ -92,10 +92,12 @@ const interpolate = (x: number, p1: [number, number], p2: [number, number]): num
     const [x1, y1] = p1;
     const [x2, y2] = p2;
     if (x1 === x2) return y1;
+    // Ensure all operands are numbers before performing arithmetic operations.
     return Number(y1) + ((Number(x) - Number(x1)) * (Number(y2) - Number(y1))) / (Number(x2) - Number(x1));
 };
 
 // FIX: Replaced `any` with a strong type for Tooltip props to ensure type safety.
+// This custom interface avoids conflicts in the generic Recharts TooltipProps where 'label' and 'name' might have different types.
 interface CustomTooltipProps extends TooltipProps<number, string> {
     fans: Fan[];
     units: { airflow: AirflowUnit, pressure: PressureUnit };
@@ -106,14 +108,16 @@ const CustomComparisonTooltip: React.FC<CustomTooltipProps> = ({ active, payload
       return (
         <div className="p-3 bg-white shadow-lg rounded-md border border-slate-200">
           <p className="font-bold text-slate-800 border-b pb-1 mb-2">
-              {`دبی: ${typeof label === 'number' ? label.toLocaleString('fa-IR') : label} ${units.airflow}`}
+              {/* FIX: Ensure label is treated as a number for formatting, as it can be inferred as 'unknown' or 'any' from the library. */}
+              {`دبی: ${typeof label === 'number' ? (label as number).toLocaleString('fa-IR') : label} ${units.airflow}`}
           </p>
           <ul className="space-y-1 text-sm">
             {payload.map((entry, index) => (
               <li key={`item-${index}`} className="flex items-center gap-2">
                 <span className="block w-3 h-3 rounded-full" style={{ backgroundColor: entry.stroke }}></span>
                 <span className="font-semibold">{entry.name}:</span>
-                <span>{typeof entry.value === 'number' ? entry.value.toLocaleString('fa-IR', { maximumFractionDigits: 2 }) : entry.value} {units.pressure}</span>
+                {/* FIX: Ensure entry.value is treated as a number for formatting to prevent type errors. */}
+                <span>{typeof entry.value === 'number' ? (entry.value as number).toLocaleString('fa-IR', { maximumFractionDigits: 2 }) : entry.value} {units.pressure}</span>
               </li>
             ))}
           </ul>
@@ -158,7 +162,6 @@ const FanComparison: React.FC<FanComparisonProps> = ({ fans, onBack }) => {
     });
 
     const convertedChartData = chartData.map(point => {
-        // FIX: Add explicit type to newPoint to prevent unsafe property assignment.
         const newPoint: { [key: string]: number } = { ...point };
         newPoint.airflow = units.airflow === 'CFM' ? m3hToCfm(point.airflow) : point.airflow;
         Object.keys(point).forEach(key => {
@@ -182,7 +185,7 @@ const FanComparison: React.FC<FanComparisonProps> = ({ fans, onBack }) => {
                 return `${fan.dimensions.height}x${fan.dimensions.width}x${fan.dimensions.depth}`;
             case 'electrical':
                 return `${fan.electricalSpecs.voltage}V / ${fan.electricalSpecs.phase}Ph / ${fan.electricalSpecs.frequency}Hz`;
-            // FIX: Replaced unsafe fan[key] with type-safe, explicit property access.
+            // Replaced unsafe fan[key] with type-safe, explicit property access.
             case 'type':
                 return fan.type;
             case 'manufacturer':
